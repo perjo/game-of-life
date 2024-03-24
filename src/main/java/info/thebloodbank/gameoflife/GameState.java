@@ -1,12 +1,11 @@
 package info.thebloodbank.gameoflife;
 
 import com.google.common.collect.Sets;
+import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class GameState {
-
-    // TODO: Should be an immutable set?
     private final Set<GridCell> living;
 
     private GameState(Set<GridCell> living) {
@@ -47,8 +46,7 @@ public class GameState {
     }
 
     public Set<GridCell> getLiving() {
-        // TODO: Should definitely be an immutable set
-        return living;
+        return Collections.unmodifiableSet(living);
     }
 
 }

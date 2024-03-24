@@ -14,12 +14,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
 
 public final class GameOfLifeVisualization extends JFrame {
 
-    public static final int VISUALISATION_DIMENSION = 100000;
+    public static final int VISUALIZATION_DIMENSION = 100000;
     public static final int DELAY_IN_MS = 500;
     private final GridPanel gridPanel;
     private GameState gameState;
@@ -29,24 +30,26 @@ public final class GameOfLifeVisualization extends JFrame {
         setTitle("Game of Life");
         gridPanel = new GridPanel();
 
-        JScrollPane scrollPane = new JScrollPane(gridPanel);
-
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(scrollPane, BorderLayout.CENTER);
-        setSize(500, 500);
-        setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setupGui();
 
         final Set<GridCell> seed = readSeed(exampleSeed);
         gameState = GameState.create(seed);
 
-        repaint();
         Timer timer = new Timer(DELAY_IN_MS, e -> {
             gameState = gameState.next();
             updateGrid(gameState.getLiving());
         });
         timer.start();
 
+    }
+
+    private void setupGui() {
+        JScrollPane scrollPane = new JScrollPane(gridPanel);
+        getContentPane().setLayout(new BorderLayout());
+        getContentPane().add(scrollPane, BorderLayout.CENTER);
+        setSize(500, 500);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     private Set<GridCell> readSeed(final ExampleSeed exampleSeed) {
@@ -63,7 +66,8 @@ public final class GameOfLifeVisualization extends JFrame {
         final String[] coords = line.split(",");
         Preconditions.checkArgument(
                 coords.length == 2,
-                "Invalid seed file! It should contains to coordinates on each line, separated by a comma sign.");
+                "Invalid seed file! " +
+                        "It should contain two coordinates on each line, separated by a comma sign.");
 
         return new GridCell(Long.parseLong(coords[0].trim()), Long.parseLong(coords[1].trim()));
     }
@@ -87,12 +91,12 @@ public final class GameOfLifeVisualization extends JFrame {
     }
 
     private static boolean coordinateInVisualization(long coordinate) {
-        return coordinate <= VISUALISATION_DIMENSION;
+        return coordinate <= VISUALIZATION_DIMENSION;
     }
 
     public static void main(String[] args) {
         final ExampleSeed exampleSeed = args.length == 0 ? ExampleSeed.PULSAR : ExampleSeed.fromString(args[0]);
-        javax.swing.SwingUtilities.invokeLater(() -> showVisualization(exampleSeed));
+        SwingUtilities.invokeLater(() -> showVisualization(exampleSeed));
     }
 
     private static void showVisualization(final ExampleSeed exampleSeed) {
@@ -109,14 +113,14 @@ public final class GameOfLifeVisualization extends JFrame {
             this.fileName = fileName;
         }
 
-        public static ExampleSeed fromString(final String s) {
+        static ExampleSeed fromString(final String s) {
             return Stream.of(values())
                     .filter(exampleSeed -> exampleSeed.fileName.equals(s))
                     .findFirst()
                     .orElseThrow(() -> new IllegalArgumentException("No matching example seed for name " + s));
         }
 
-        public String getFileName() {
+        String getFileName() {
             return fileName;
         }
     }
