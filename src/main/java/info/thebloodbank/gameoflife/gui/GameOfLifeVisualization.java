@@ -31,6 +31,7 @@ public class GameOfLifeVisualization extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
+        // TODO: move seed to file
         gameState = GameState.create(Set.of(
                 new GridCell(10, 10),
                 new GridCell(11, 10),
