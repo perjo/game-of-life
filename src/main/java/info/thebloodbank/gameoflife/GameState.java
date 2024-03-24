@@ -23,7 +23,7 @@ public class GameState {
                 .collect(Collectors.toSet());
 
         Set<GridCell> reproduced = living.stream()
-                .flatMap(gridCell -> gridCell.getNeighbors().stream())
+                .flatMap(gridCell -> gridCell.findNeighbors().stream())
                 .distinct()
                 .filter(this::willBeReproduced)
                 .collect(Collectors.toSet());
@@ -42,7 +42,7 @@ public class GameState {
     }
 
     private int numberOfLivingNeighbors(GridCell cell) {
-        Set<GridCell> neighbors = cell.getNeighbors();
+        Set<GridCell> neighbors = cell.findNeighbors();
         return Sets.intersection(living, neighbors).size();
     }
 

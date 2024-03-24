@@ -1,36 +1,35 @@
 package info.thebloodbank.gameoflife;
 
-import java.math.BigInteger;
-import java.util.Objects;
 import java.util.Set;
 
-public record GridCell(BigInteger x, BigInteger y) {
+public record GridCell(long x, long y) {
 
-    public GridCell(int x, int y) {
-        this(BigInteger.valueOf(x), BigInteger.valueOf(y));
-    }
+    public Set<GridCell> findNeighbors() {
 
-    public Set<GridCell> getNeighbors() {
+        final long left = x - 1;
+        final long right = x + 1;
+        final long below = y - 1;
+        final long above = y + 1;
+
         return Set.of(
-                // TODO: check BigInteger boundaries
-                new GridCell(x.subtract(BigInteger.ONE), y.subtract(BigInteger.ONE)),
-                new GridCell(x.subtract(BigInteger.ONE), y),
-                new GridCell(x.subtract(BigInteger.ONE), y.add(BigInteger.ONE)),
+                new GridCell(left, below),
+                new GridCell(left, y),
+                new GridCell(left, above),
 
-                new GridCell(x, y.subtract(BigInteger.ONE)),
-                new GridCell(x, y.add(BigInteger.ONE)),
+                new GridCell(x, below),
+                new GridCell(x, above),
 
-                new GridCell(x.add(BigInteger.ONE), y.subtract(BigInteger.ONE)),
-                new GridCell(x.add(BigInteger.ONE), y),
-                new GridCell(x.add(BigInteger.ONE), y.add(BigInteger.ONE))
+                new GridCell(right, below),
+                new GridCell(right, y),
+                new GridCell(right, above)
         );
     }
 
-    public BigInteger getX() {
+    public long getX() {
         return x;
     }
 
-    public BigInteger getY() {
+    public long getY() {
         return y;
     }
 }

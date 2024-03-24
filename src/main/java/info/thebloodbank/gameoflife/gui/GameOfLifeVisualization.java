@@ -7,7 +7,6 @@ import info.thebloodbank.gameoflife.GridCell;
 import java.awt.BorderLayout;
 import java.awt.Point;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Set;
@@ -66,7 +65,7 @@ public final class GameOfLifeVisualization extends JFrame {
                 coords.length == 2,
                 "Invalid seed file! It should contains to coordinates on each line, separated by a comma sign.");
 
-        return new GridCell(new BigInteger(coords[0].trim()), new BigInteger(coords[1].trim()));
+        return new GridCell(Long.parseLong(coords[0].trim()), Long.parseLong(coords[1].trim()));
     }
 
     private void updateGrid(Set<GridCell> gridCells) {
@@ -78,7 +77,7 @@ public final class GameOfLifeVisualization extends JFrame {
     }
 
     private static Point toPoint(GridCell gridCell) {
-        return new Point(gridCell.getX().intValue(), gridCell.getY().intValue());
+        return new Point((int) gridCell.getX(), (int) gridCell.getY());
     }
 
     private static boolean visibleInGui(GridCell gridCell) {
@@ -87,8 +86,8 @@ public final class GameOfLifeVisualization extends JFrame {
 
     }
 
-    private static boolean coordinateInVisualization(BigInteger coordinate) {
-        return coordinate.compareTo(BigInteger.valueOf(VISUALISATION_DIMENSION)) < 0;
+    private static boolean coordinateInVisualization(long coordinate) {
+        return coordinate <= VISUALISATION_DIMENSION;
     }
 
     public static void main(String[] args) {
