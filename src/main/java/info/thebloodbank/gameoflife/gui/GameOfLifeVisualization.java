@@ -1,14 +1,25 @@
 package info.thebloodbank.gameoflife.gui;
 
+import com.google.common.base.Preconditions;
 import info.thebloodbank.gameoflife.GameState;
 import info.thebloodbank.gameoflife.GridCell;
-
-import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Point;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.Timer;
+import javax.swing.WindowConstants;
+import javax.swing.border.LineBorder;
 
 public class GameOfLifeVisualization extends JFrame {
 
@@ -31,86 +42,36 @@ public class GameOfLifeVisualization extends JFrame {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        // TODO: move seed to file
-        gameState = GameState.create(Set.of(
-                new GridCell(10, 10),
-                new GridCell(11, 10),
-                new GridCell(12, 10),
+        final Set<GridCell> seed = readSeed();
 
-                new GridCell(16, 10),
-                new GridCell(17, 10),
-                new GridCell(18, 10),
-
-                new GridCell(8, 12),
-                new GridCell(13, 12),
-
-                new GridCell(15, 12),
-                new GridCell(20, 12),
-
-                new GridCell(8, 13),
-                new GridCell(13, 13),
-
-                new GridCell(15, 13),
-                new GridCell(20, 13),
-
-                new GridCell(8, 14),
-                new GridCell(13, 14),
-
-                new GridCell(15, 14),
-                new GridCell(20, 14),
-
-                new GridCell(10, 15),
-                new GridCell(11, 15),
-                new GridCell(12, 15),
-
-                new GridCell(16, 15),
-                new GridCell(17, 15),
-                new GridCell(18, 15),
-
-                new GridCell(10, 17),
-                new GridCell(11, 17),
-                new GridCell(12, 17),
-
-                new GridCell(16, 17),
-                new GridCell(17, 17),
-                new GridCell(18, 17),
-
-                new GridCell(8, 18),
-                new GridCell(13, 18),
-
-                new GridCell(15, 18),
-                new GridCell(20, 18),
-
-                new GridCell(8, 19),
-                new GridCell(13, 19),
-
-                new GridCell(15, 19),
-                new GridCell(20, 19),
-
-                new GridCell(8, 20),
-                new GridCell(13, 20),
-
-                new GridCell(15, 20),
-                new GridCell(20, 20),
-
-                new GridCell(10, 22),
-                new GridCell(11, 22),
-                new GridCell(12, 22),
-
-                new GridCell(16, 22),
-                new GridCell(17, 22),
-                new GridCell(18, 22)
-
-        ));
+        gameState = GameState.create(seed);
 
         repaint();
-        Timer timer = new Timer(2000, e -> {
+        Timer timer = new Timer(500, e -> {
             gameState = gameState.next();
             updateGrid(gameState.getLiving());
         });
 
         timer.start();
 
+    }
+
+    private Set<GridCell> readSeed() {
+        try (Stream<String> lines = Files.lines(Paths.get(getClass().getResource("/seeds/glider.csv").toURI()))) {
+            return lines.map(this::lineToGridCell).collect(Collectors.toSet());
+        } catch (IOException | URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    private GridCell lineToGridCell(final String line) {
+        final String[] coords = line.split(",");
+        Preconditions.checkArgument(
+                coords.length == 2,
+                "Invalid seed file! It should contains to coordinates on each line, separated by a comma sign.");
+
+        return new GridCell(new BigInteger(coords[0].trim()), new BigInteger(coords[1].trim()));
     }
 
     private void updateGrid(Set<GridCell> gridCells) {
