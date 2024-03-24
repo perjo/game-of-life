@@ -61,7 +61,7 @@ upp ett initialt `GameState`.
 - `GridVisualizationModel.java` är en abstrakt klass som kan implementeras för att generera sekvenser av data att visas i ett rutnät. 
 - `ModelChangeListener.java` är en implementation av en lyssnare på förändringar i `GridVisualizationModel`s (*observer pattern*). 
 
-Dessa fyra klasser är helt oberoende av Game of Life och skulle kunna brytas ut till ett eget bibliotek. 
+De fyra ovanstående klasserna är helt oberoende av Game of Life och skulle kunna brytas ut till ett eget bibliotek. 
 
 - `GameOfLifeVisualizationModel.java` är en implementation av `GridVisualizationModel` för att skapa Game of Life-data. Den innehåller en `GameOfLife`-instans och en timer för att be denna om regelbundna tillståndsövergångar. 
 - `GameOfLifeApplication.java` är den körbara klassen. Dess `main`-metod väljer *seed* utifrån ett programargument, sätter upp en `GameOfLifeVisualizationModel` och skapar en `GridVisualization`-komponent som visas på skärmen.  
