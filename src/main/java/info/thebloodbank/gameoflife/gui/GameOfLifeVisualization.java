@@ -59,7 +59,6 @@ public final class GameOfLifeVisualization extends JFrame {
     private static boolean visibleInGui(GridCell gridCell) {
         return coordinateInVisualization(gridCell.getX())
                 && coordinateInVisualization(gridCell.getY());
-
     }
 
     private static boolean coordinateInVisualization(long coordinate) {

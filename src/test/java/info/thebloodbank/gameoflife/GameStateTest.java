@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+// TODO: should be tested from GameOfLife class?
 class GameStateTest {
 
     public static Stream<Arguments> moreThanThreeNeighborsSetup() {

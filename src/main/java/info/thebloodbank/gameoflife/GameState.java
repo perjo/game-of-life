@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class GameState {
+class GameState {
     private final Set<GridCell> living;
 
     private GameState(Set<GridCell> living) {
@@ -16,7 +16,7 @@ public class GameState {
         return new GameState(seed);
     }
 
-    public GameState next() {
+    GameState next() {
         Set<GridCell> surviving = living.stream()
                 .filter(this::willSurvive)
                 .collect(Collectors.toSet());
@@ -45,7 +45,7 @@ public class GameState {
         return Sets.intersection(living, neighbors).size();
     }
 
-    public Set<GridCell> getLiving() {
+    Set<GridCell> getLiving() {
         return Collections.unmodifiableSet(living);
     }
 

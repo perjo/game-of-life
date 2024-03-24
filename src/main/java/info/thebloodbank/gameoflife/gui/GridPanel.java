@@ -4,16 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Set;
 
-public class GridPanel extends JPanel {
+class GridPanel extends JPanel {
 
     private Set<Point> highlightedCells = Set.of();
 
-    public GridPanel() {
+    GridPanel() {
         final int dimensionInPixels = GameOfLifeVisualization.VISUALIZATION_DIMENSION * 5;
         setPreferredSize(new Dimension(dimensionInPixels, dimensionInPixels));
     }
 
-    public void update(final Set<Point> highlightedCells) {
+    void update(final Set<Point> highlightedCells) {
         this.highlightedCells = highlightedCells;
         repaint();
     }
