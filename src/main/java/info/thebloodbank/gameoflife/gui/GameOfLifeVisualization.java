@@ -9,8 +9,10 @@ import java.awt.Point;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -57,12 +59,12 @@ public class GameOfLifeVisualization extends JFrame {
     }
 
     private Set<GridCell> readSeed() {
-        try (Stream<String> lines = Files.lines(Paths.get(getClass().getResource("/seeds/glider.csv").toURI()))) {
+        final URL resource = getClass().getResource("/seeds/glider.csv");
+        try (Stream<String> lines = Files.lines(Paths.get(Objects.requireNonNull(resource).toURI()))) {
             return lines.map(this::lineToGridCell).collect(Collectors.toSet());
         } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     private GridCell lineToGridCell(final String line) {
