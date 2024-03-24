@@ -1,68 +1,61 @@
 package info.thebloodbank.gameoflife.gui;
 
 import com.google.common.base.Preconditions;
+import com.google.common.io.Resources;
 import info.thebloodbank.gameoflife.GameState;
 import info.thebloodbank.gameoflife.GridCell;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.Timer;
 import javax.swing.WindowConstants;
-import javax.swing.border.LineBorder;
 
-public class GameOfLifeVisualization extends JFrame {
+public final class GameOfLifeVisualization extends JFrame {
 
-    public static final long VISUALISATION_DIMENSION = 10000L;
+    public static final long VISUALISATION_DIMENSION = 100000L;
+    public static final int DELAY_IN_MS = 500;
     private final GridPanel gridPanel;
     private GameState gameState;
 
-    GameOfLifeVisualization() {
+    private GameOfLifeVisualization(final ExampleSeed exampleSeed) {
+
         setTitle("Game of Life");
         gridPanel = new GridPanel();
 
         JScrollPane scrollPane = new JScrollPane(gridPanel);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setBorder(new LineBorder(Color.BLACK, 2));
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(scrollPane, BorderLayout.CENTER);
-        setSize(1200, 1200);
+        setSize(500, 500);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        final Set<GridCell> seed = readSeed();
-
+        final Set<GridCell> seed = readSeed(exampleSeed);
         gameState = GameState.create(seed);
 
         repaint();
-        Timer timer = new Timer(500, e -> {
+        Timer timer = new Timer(DELAY_IN_MS, e -> {
             gameState = gameState.next();
             updateGrid(gameState.getLiving());
         });
-
         timer.start();
 
     }
 
-    private Set<GridCell> readSeed() {
-        final URL resource = getClass().getResource("/seeds/glider.csv");
-        try (Stream<String> lines = Files.lines(Paths.get(Objects.requireNonNull(resource).toURI()))) {
-            return lines.map(this::lineToGridCell).collect(Collectors.toSet());
-        } catch (IOException | URISyntaxException e) {
+    private Set<GridCell> readSeed(final ExampleSeed exampleSeed) {
+        try {
+            final List<String> lines = Resources.readLines(Resources.getResource(this.getClass(),
+                    "/seeds/" + exampleSeed.getFileName() + ".csv"), StandardCharsets.UTF_8);
+            return lines.stream().map(this::lineToGridCell).collect(Collectors.toSet());
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -99,11 +92,35 @@ public class GameOfLifeVisualization extends JFrame {
     }
 
     public static void main(String[] args) {
-        javax.swing.SwingUtilities.invokeLater(GameOfLifeVisualization::showVisualization);
+        // TODO: introduce enum?
+        final ExampleSeed exampleSeed = args.length == 0 ? ExampleSeed.PULSAR : ExampleSeed.fromString(args[0]);
+        javax.swing.SwingUtilities.invokeLater(() -> showVisualization(exampleSeed));
     }
 
-    private static void showVisualization() {
-        new GameOfLifeVisualization();
+    private static void showVisualization(final ExampleSeed exampleSeed) {
+        new GameOfLifeVisualization(exampleSeed);
+    }
+
+    private enum ExampleSeed {
+        GLIDER("glider"),
+        PULSAR("pulsar");
+
+        private final String fileName;
+
+        ExampleSeed(final String fileName) {
+            this.fileName = fileName;
+        }
+
+        public static ExampleSeed fromString(final String s) {
+            return Stream.of(values())
+                    .filter(exampleSeed -> exampleSeed.fileName.equals(s))
+                    .findFirst()
+                    .orElseThrow(() -> new IllegalArgumentException("No matching example seed for name " + s));
+        }
+
+        public String getFileName() {
+            return fileName;
+        }
     }
 
 

@@ -9,7 +9,7 @@ public class GridPanel extends JPanel {
     private Set<Point> highlightedCells = Set.of();
 
     public GridPanel() {
-        setPreferredSize(new Dimension(1000, 1000));
+        setPreferredSize(new Dimension(10000, 10000));
     }
 
     public void update(final Set<Point> highlightedCells) {

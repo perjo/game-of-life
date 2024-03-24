@@ -4,6 +4,8 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Set;
 
+
+// TODO: make record 
 public class GridCell {
     private final BigInteger x;
     private final BigInteger y;
