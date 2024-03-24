@@ -4,20 +4,10 @@ import java.math.BigInteger;
 import java.util.Objects;
 import java.util.Set;
 
-
-// TODO: make record 
-public class GridCell {
-    private final BigInteger x;
-    private final BigInteger y;
-
-    public GridCell(BigInteger x, BigInteger y) {
-        this.x = x;
-        this.y = y;
-    }
+public record GridCell(BigInteger x, BigInteger y) {
 
     public GridCell(int x, int y) {
-        this.x = BigInteger.valueOf(x);
-        this.y = BigInteger.valueOf(y);
+        this(BigInteger.valueOf(x), BigInteger.valueOf(y));
     }
 
     public Set<GridCell> getNeighbors() {
@@ -42,26 +32,5 @@ public class GridCell {
 
     public BigInteger getY() {
         return y;
-    }
-
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        GridCell gridCell = (GridCell) object;
-        return Objects.equals(x, gridCell.x) && Objects.equals(y, gridCell.y);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(x, y);
-    }
-
-    @Override
-    public String toString() {
-        return "GridCell{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
     }
 }

@@ -92,7 +92,6 @@ public final class GameOfLifeVisualization extends JFrame {
     }
 
     public static void main(String[] args) {
-        // TODO: introduce enum?
         final ExampleSeed exampleSeed = args.length == 0 ? ExampleSeed.PULSAR : ExampleSeed.fromString(args[0]);
         javax.swing.SwingUtilities.invokeLater(() -> showVisualization(exampleSeed));
     }
