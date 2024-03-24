@@ -19,7 +19,7 @@ import javax.swing.WindowConstants;
 
 public final class GameOfLifeVisualization extends JFrame {
 
-    public static final long VISUALISATION_DIMENSION = 100000L;
+    public static final int VISUALISATION_DIMENSION = 100000;
     public static final int DELAY_IN_MS = 500;
     private final GridPanel gridPanel;
     private GameState gameState;

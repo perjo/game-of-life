@@ -9,7 +9,8 @@ public class GridPanel extends JPanel {
     private Set<Point> highlightedCells = Set.of();
 
     public GridPanel() {
-        setPreferredSize(new Dimension(10000, 10000));
+        final int dimensionInPixels = GameOfLifeVisualization.VISUALISATION_DIMENSION * 5;
+        setPreferredSize(new Dimension(dimensionInPixels, dimensionInPixels));
     }
 
     public void update(final Set<Point> highlightedCells) {

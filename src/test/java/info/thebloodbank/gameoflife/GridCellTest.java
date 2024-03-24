@@ -89,6 +89,7 @@ class GridCellTest {
         final Set<GridCell> neighbors = gridCell.findNeighbors();
 
         assertThat(neighbors).hasSize(8);
+
     }
 
 }
