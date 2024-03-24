@@ -18,6 +18,10 @@ public class GameOfLife {
         this.gameState = GameState.create(seed);
     }
 
+    public GameOfLife(Set<GridCell> seed) {
+        this.gameState = GameState.create(seed);
+    }
+
     public Set<GridCell> nextState() {
         gameState = gameState.next();
         return gameState.getLiving();

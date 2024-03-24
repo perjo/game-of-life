@@ -1,15 +1,22 @@
 package info.thebloodbank.gameoflife.gui;
 
-import javax.swing.*;
-import java.awt.*;
+import static info.thebloodbank.gameoflife.gui.GameOfLifeVisualizationModel.VISUALIZATION_DIMENSION;
+
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.Set;
+import javax.swing.JPanel;
 
 class GridPanel extends JPanel {
 
     private Set<Point> highlightedCells = Set.of();
 
     GridPanel() {
-        final int dimensionInPixels = GameOfLifeVisualization.VISUALIZATION_DIMENSION * 5;
+        final int dimensionInPixels = VISUALIZATION_DIMENSION * 5;
         setPreferredSize(new Dimension(dimensionInPixels, dimensionInPixels));
     }
 
